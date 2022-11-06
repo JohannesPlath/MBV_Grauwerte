@@ -11,6 +11,7 @@ import numpy as np
 
 image_path = 'pics/RT.png'
 img_to_save = 'pics/RT_NEW.png'
+img_to_save2 = 'pics/RT_Inverted.png'
 # image = plt.imread(image_path)
 image = cv2.cvtColor (cv2.imread (image_path), cv2.COLOR_BGR2RGB)
 # image = Image.open(os.path.join(image_path))
@@ -66,12 +67,29 @@ def print_gray_histgram(image_for_histo):
     plt.show()
     return scalar
 
+def invert_gray_scale(image):
+    gray_value_matrix = image.reshape(image.shape[0] * image.shape[1], image.shape[2])
+    flat_values = gray_value_matrix.T
+    flat_values = flat_values[0:3]
+    imageMatrix = flat_values.T
+    counter = 0
+    for elem in imageMatrix:
+        for el in elem:
+            #for e in el:
+                new_elem = 256 - el
+                imageMatrix[counter][:] = new_elem
+        counter = counter+1
+    newImage = imageMatrix.reshape(image.shape[0] , image.shape[1], image.shape[2])
+    return newImage
+
 
 if __name__ == '__main__':
     # gaussian_numbers = np.random.normal (size=10000)
     # Matrix1 = np.arange (12).reshape (4, 3)
 
-    show_image(image)
+   #image = [[[33, 33, 33 ]]]
+    #invert_gray_scale(image)
+    #show_image(image)
 
     #gray_value_matrix = matrix.reshape (matrix.shape[0] * matrix.shape[1], matrix.shape[2])
     #print ("len(gray_value_matrix) ", len (gray_value_matrix))
@@ -125,6 +143,8 @@ if __name__ == '__main__':
     print ('shape: ', image.shape)
     print ('matrix[1][1][:3]\n', image)
 
+
+
     import cv2
     import matplotlib.pyplot as plt
 
@@ -137,5 +157,11 @@ if __name__ == '__main__':
     cv2.waitKey(0)
     cv2.imwrite(img_to_save, image2)
 
+    inverted_image = invert_gray_scale(image2)
+    show_image(inverted_image)
+    print(inverted_image)
+    cv2.imshow('matrix', inverted_image)
+    cv2.waitKey(0)
+    cv2.imwrite(img_to_save2, image2)
 
 
